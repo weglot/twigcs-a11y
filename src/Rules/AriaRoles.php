@@ -66,6 +66,26 @@ class AriaRoles extends AbstractRule implements RuleInterface
                     }
                     $tokenIndex++;
                 }
+	            if (preg_match(
+		            '/<i[^>]*\s+role="[^"]*"[^>]*\s+aria-[^>]*"/i',
+		            $textToAnalyse,
+		            $matches
+	            )
+	            ) {
+		            /**
+		             * @psalm-suppress InternalMethod
+		             * @psalm-suppress UndefinedPropertyFetch
+		             */
+		            $violations[] = $this->createViolation(
+			            (string) $tokens->getSourceContext()->getPath(),
+			            $token->getLine(),
+			            $token->getColumn(),
+			            sprintf(
+				            '[Weglot.IRole] Invalid \'role i\'. element i should have an ttribute role and/or a aria- attribute. Found `%1$s`.',
+				            trim($matches[0])
+			            )
+		            );
+	            }
                 if (preg_match(
                     "/role=((.)+)([>'\" ]+)/U",
                     $textToAnalyse,
