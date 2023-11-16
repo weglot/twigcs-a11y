@@ -7,7 +7,7 @@ use FriendsOfTwig\Twigcs\Rule\RuleInterface;
 use FriendsOfTwig\Twigcs\TwigPort\Token as TwigToken;
 use FriendsOfTwig\Twigcs\TwigPort\TokenStream;
 
-class TabIndex extends AbstractRule implements RuleInterface
+class Iframe extends AbstractRule implements RuleInterface
 {
     /**
      * @var \FriendsOfTwig\Twigcs\Validator\Violation[]
@@ -47,8 +47,9 @@ class TabIndex extends AbstractRule implements RuleInterface
                     }
                     $tokenIndex++;
                 }
-                if (preg_match(
-                    "/tabindex=['\"]?((?!0|-1).)+['\"\s>]/U",
+
+                if (!preg_match(
+                    '/<(iframe)\s+[^>]*(title\s*=\s*["\']([^"\']*)["\'])[^>]*>/i',
                     $textToAnalyse,
                     $matches
                 )
@@ -62,13 +63,10 @@ class TabIndex extends AbstractRule implements RuleInterface
                         $token->getLine(),
                         $token->getColumn(),
                         sprintf(
-                            '[A11Y.TabIndex] Invalid \'tabindex\'. Tabindex must be 0 or -1. Found `%1$s`.',
-                            trim($matches[0])
+                            '[Weglot.Iframe] Invalid \'Iframe\'. Iframe must have an explicit title attribute.'
                         )
                     );
                 }
-
-				
             }
 
             $tokens->next();
