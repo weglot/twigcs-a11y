@@ -63,8 +63,7 @@ class Iframe extends AbstractRule implements RuleInterface
                         $token->getLine(),
                         $token->getColumn(),
                         sprintf(
-                            '[Weglot.Iframe] Invalid \'Iframe\'. Iframe must have an explicit title and aria-label attribute Found.',
-                            trim($matches[0])
+                            '[Weglot.Iframe] Invalid \'Iframe\'. Iframe must have an explicit title attribute.'
                         )
                     );
                 }
