@@ -48,8 +48,8 @@ class Iframe extends AbstractRule implements RuleInterface
                     $tokenIndex++;
                 }
 
-                if (preg_match(
-                    '/<iframe[^>]*\s+title="[^"]*"[^>]*\s+aria-label="[^"]*"/i',
+                if (!preg_match(
+                    '/<(iframe)\s+[^>]*(title\s*=\s*["\']([^"\']*)["\'])[^>]*>/i',
                     $textToAnalyse,
                     $matches
                 )
@@ -63,7 +63,7 @@ class Iframe extends AbstractRule implements RuleInterface
                         $token->getLine(),
                         $token->getColumn(),
                         sprintf(
-                            '[Weglot.Iframe] Invalid \'Iframe\'. Iframe must have an explicit title and aria-label attribute Found. `%1$s`.',
+                            '[Weglot.Iframe] Invalid \'Iframe\'. Iframe must have an explicit title and aria-label attribute Found.',
                             trim($matches[0])
                         )
                     );

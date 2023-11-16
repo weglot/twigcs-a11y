@@ -7,7 +7,7 @@ use FriendsOfTwig\Twigcs\Rule\RuleInterface;
 use FriendsOfTwig\Twigcs\TwigPort\Token as TwigToken;
 use FriendsOfTwig\Twigcs\TwigPort\TokenStream;
 
-class Link extends AbstractRule implements RuleInterface
+class Table extends AbstractRule implements RuleInterface
 {
     /**
      * @var \FriendsOfTwig\Twigcs\Validator\Violation[]
@@ -47,9 +47,8 @@ class Link extends AbstractRule implements RuleInterface
                     }
                     $tokenIndex++;
                 }
-
                 if (!preg_match(
-                    '/<a[^>]*\s+target="_blank"[^>]*>.*open_in_new<\/i>/i',
+                    '/<th(?=\s)[^>]*\srole\s*=\s*["\']\s*columnheader\s*["\'][^>]*>/i',
                     $textToAnalyse,
                     $matches
                 )
@@ -63,48 +62,10 @@ class Link extends AbstractRule implements RuleInterface
                         $token->getLine(),
                         $token->getColumn(),
                         sprintf(
-                            '[Weglot.LinkBlank] Invalid \'link blank\'. Link with target blank must have the icon. Found.',
-                            trim($matches[0])
+                            '[A11Y.Table] Invalid \'column header role\'. All column headers should have the WAI-ARIA role: “columnheader”',
                         )
                     );
                 }
-
-	            if (preg_match(
-		            '/<a\s[^>]*\stitle\s*=\s*["\']([^"\']*)["\'][^>]*>/i',
-		            $textToAnalyse,
-		            $matches
-	            )
-	            ) {
-		            $titleValue = $matches[1];
-		            if (empty($titleValue)) {
-			            /**
-			             * @psalm-suppress InternalMethod
-			             * @psalm-suppress UndefinedPropertyFetch
-			             */
-			            $violations[] = $this->createViolation(
-				            (string) $tokens->getSourceContext()->getPath(),
-				            $token->getLine(),
-				            $token->getColumn(),
-				            sprintf(
-					            '[Weglot.LinkTitle] Invalid \'link title\'. Link must have a non-empty title attribute. Found `%1$s`.',
-					            trim($matches[0])
-				            )
-			            );
-		            }
-	            }else{
-		            /**
-		             * @psalm-suppress InternalMethod
-		             * @psalm-suppress UndefinedPropertyFetch
-		             */
-		            $violations[] = $this->createViolation(
-			            (string) $tokens->getSourceContext()->getPath(),
-			            $token->getLine(),
-			            $token->getColumn(),
-			            sprintf(
-				            '[Weglot.LinkTitle] Invalid \'link title\'. Link must have a title attribute.',
-			            )
-		            );
-	            }
             }
 
             $tokens->next();

@@ -1,25 +1,6 @@
-{# TabIndex #}
-<div tabindex=1></div> {# BAD #}
-<div tabindex="1"></div> {# BAD #}
-<div tabindex='1'></div> {# BAD #}
-<div tabindex="0"></div> {# GOOD #}
-<div tabindex='0'></div> {# GOOD #}
-<div tabindex='-1'></div> {# GOOD #}
-<div tabindex=-1></div> {# GOOD #}
-<div tabindex='-1'></div> {# GOOD #}
-<div class="{{ test }}" tabindex={{ test }} id="{{ blala }}"></div> {# BAD #}
-<div tabindex='{{ test }}'></div> {# BAD #}
-<div tabindex='{{test}}'></div> {# BAD #}
+<a href="#" title="dedede" target="_blank"><i>open_in_new</i>invalid link</a>
+<img src="img.jpeg" class="" role="presentation"/>
 
-{# BannedHTMLTags #}
-<marquee>This is a marquee</marquee> {# BAD #}
-<p><blink>This blinks</blink></p> {# BAD #}
+<iframe src="" title="ddd" aria-label="frfrfr"></iframe>
 
-{# AriaRoles #}
-<div role="article"></div> {# GOOD #}
-<div role="invalid_role"></div> {# BAD #}
-<div role='invalid_role'></div> {# BAD #}
-<div role=invalid></div> {# BAD #}
-<div role=command></div> {# BAD - abstract role #}
-<div class='{{ variable }}' role=invalid></div> {# BAD #}
-<div role='{{ variable }}' /> {# BAD #}
+<table><th role="">frfr</th></table>

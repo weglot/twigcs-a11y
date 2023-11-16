@@ -10,15 +10,16 @@ use NdB\TwigCSA11Y\Rules\Iframe;
 use NdB\TwigCSA11Y\Rules\Img;
 use NdB\TwigCSA11Y\Rules\Link;
 use NdB\TwigCSA11Y\Rules\TabIndex;
+use NdB\TwigCSA11Y\Rules\Table;
 
 class Ruleset implements RulesetInterface
 {
-    private $twigMajorVersion;
+	private $twigMajorVersion;
 
-    public function __construct(int $twigMajorVersion)
-    {
-        $this->twigMajorVersion = $twigMajorVersion;
-    }
+	public function __construct(int $twigMajorVersion)
+	{
+		$this->twigMajorVersion = $twigMajorVersion;
+	}
 
 	public function getRules()
 	{
@@ -28,6 +29,7 @@ class Ruleset implements RulesetInterface
 			new AriaRoles(Violation::SEVERITY_ERROR),
 			new Link(Violation::SEVERITY_ERROR),
 			new Iframe(Violation::SEVERITY_ERROR),
+			new Table(Violation::SEVERITY_ERROR),
 			new Img(Violation::SEVERITY_ERROR)
 		];
 	}

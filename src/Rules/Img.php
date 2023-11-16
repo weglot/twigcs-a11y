@@ -49,27 +49,55 @@ class Img extends AbstractRule implements RuleInterface
                 }
 
                 if (preg_match(
-                    '/<img[^>]*\s+alt="[^"]*"/i',
+                    '/<(img|i)\s+[^>]*(alt\s*=\s*["\']([^"\']*)["\']|aria-label\s*=\s*["\']([^"\']*)["\'])[^>]*>/i',
                     $textToAnalyse,
                     $matches
                 )
                 ) {
-                    /**
-                     * @psalm-suppress InternalMethod
-                     * @psalm-suppress UndefinedPropertyFetch
-                     */
-                    $violations[] = $this->createViolation(
-                        (string) $tokens->getSourceContext()->getPath(),
-                        $token->getLine(),
-                        $token->getColumn(),
-                        sprintf(
-                            '[Weglot.Img] Invalid \'Img alt\'. Img must have an explicit alt attribute Found. `%1$s`.',
-                            trim($matches[0])
-                        )
-                    );
+	                $tagName = $matches[1];
+	                $altValue = $matches[4] ?? $matches[6] ?? '';
+	                if (empty($altValue)) {
+		                /**
+		                 * @psalm-suppress InternalMethod
+		                 * @psalm-suppress UndefinedPropertyFetch
+		                 */
+		                $violations[] = $this->createViolation(
+			                (string) $tokens->getSourceContext()->getPath(),
+			                $token->getLine(),
+			                $token->getColumn(),
+			                sprintf(
+				                '[Weglot.Img] Invalid \'Img alt\'. Img must have an non empty alt or aria-label attribute.'
+			                )
+		                );
+	                }
+                }else{
+	                if (!preg_match(
+		                '/<(img|i)\s+[^>]*(aria-hidden\s*=\s*["\']true["\']|role\s*=\s*["\']presentation["\']|alt\s*=\s*["\']""["\'])[^>]*>/i',
+		                $textToAnalyse,
+		                $matches
+	                )
+	                ) {
+		                $tagName = $matches[1];
+		                $attributeValue = $matches[4] ?? $matches[6] ?? $matches[8] ?? '';
+
+		                if (empty($attributeValue)) {
+			                /**
+			                 * @psalm-suppress InternalMethod
+			                 * @psalm-suppress UndefinedPropertyFetch
+			                 */
+			                $violations[] = $this->createViolation(
+				                (string) $tokens->getSourceContext()->getPath(),
+				                $token->getLine(),
+				                $token->getColumn(),
+				                sprintf(
+					                '[Weglot.Img] Invalid \'Img alt\'. Img with no description should have a aria-hidden="true" attribute or role="presentation" or alt=""'
+				                )
+			                );
+		                }
+	                }
+
                 }
             }
-
             $tokens->next();
         }
         return $violations;
